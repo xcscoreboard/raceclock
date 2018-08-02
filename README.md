@@ -6,6 +6,12 @@ The size and positions of the clock and buttons can be customized using the foll
 * Shift-Left and Shift-Right increase and decrease the size of the buttons (Start, Stop, Reset, and Exit buttons)
 * Alt-Left, Alt-Right, Alt-Up, and Alt-Down position the location of the clock on the screen.
 * Ctl-Left, Ctl-Right, Ctl-Up, and Ctl-Down position the location of the buttons on the screen.
+
+Keyboard shortcuts:
+* s = start/stop
+* r = reset
+* x = quit
+* q = quit
  
 After you start the clock, simply click anywhere in the clock display background to toggle the visibility of the buttons. This allows you to have a unencumbered view of the clock digits.
 

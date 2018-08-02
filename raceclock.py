@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 from Tkinter import *
-import datetime
+import datetime, re
 try:
    import cPickle as pickle
 except:
@@ -50,12 +50,22 @@ class Timer():
     self.master.bind("<Shift-Left>", self.shiftleft)
     self.master.bind(".", lambda event: self.colorchange(1))
     self.master.bind(",", lambda event: self.colorchange(-1))
+    self.master.bind("s", lambda event: self.start_stop())
+    self.master.bind("r", lambda event: self.reset_timer())
+    self.master.bind("q", lambda event: self.Exit())
+    self.master.bind("x", lambda event: self.Exit())
     self.timer_active=False
     self.timerstr = StringVar()
     self.timerstr.set("00:00")
+
+    vcmd = (self.master.register(self.ValidateDigit), '%P')
+
     self.timer = Entry(self.master, textvariable=self.timerstr, bg="grey", fg="yellow",
                  font=("Helvetica", self.config['timerfontsize']),
-                 width=5, disabledbackground="black", disabledforeground=self.config['disabledfgcolor'], borderwidth=0)
+                 width=5, disabledbackground="black", disabledforeground=self.config['disabledfgcolor'], 
+                 validate = 'key',
+                 validatecommand = vcmd,
+                 borderwidth=0)
     #self.buttongroup = Pmw.Group(self.master,tag_pyclass=None)
     self.buttongroup = Frame(master=self.master)
     self.start = Button(self.buttongroup, text="Start", fg="black", 
@@ -76,6 +86,14 @@ class Timer():
     self.reset.grid(row=0, column=2, sticky=W)
     self.exit.grid(row=0, column=3, sticky=W)
     self.timer.grid(row=0, column=0, columnspan=100, rowspan=100, sticky=W+E, padx=self.config['timerpadx'], pady=self.config['timerpady'])
+    self.timer.focus_set()
+    self.timer.icursor(3)
+
+  def ValidateDigit(self, text):
+    regex = re.compile('^[0-9,:]*$')
+    if regex.match(text) is None:
+      return False
+    return True
 
   def colorchange(self,upordown):
     i = COLORS.index(self.config['disabledfgcolor']) + upordown
@@ -138,6 +156,12 @@ class Timer():
       self.buttongroup.grid(row=self.config['buttonrow'], column=self.config['buttoncol'], sticky=E)
     else:
       self.buttongroup.grid_forget()
+
+  def start_stop(self):
+    if self.timer_active == True:
+      self.stop_timer()
+    else:
+      self.start_timer()
 
   def start_timer(self):
     self.timer.config(state=DISABLED)
